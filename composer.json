@@ -6,8 +6,8 @@
     "type": "project",
     "repositories": [
         {
-            "type": "path",
-            "url": "/Users/davidcallizaya/NetBeansProjects/nayra"
+            "type": "vcs",
+            "url": "https://github.com/ProcessMaker/nayra"
         }
     ],
     "require": {
