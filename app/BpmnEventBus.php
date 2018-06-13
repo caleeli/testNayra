@@ -9,7 +9,7 @@ use ProcessMaker\Nayra\Bpmn\Models\ActivityActivatedEvent;
  * Description of Dispatcher
  *
  */
-class EventBus implements EventBusInterface
+class BpmnEventBus implements EventBusInterface
 {
     /**
      * @var \Illuminate\Events\Dispatcher $dispacher
@@ -76,15 +76,4 @@ class EventBus implements EventBusInterface
     {
         $this->dispatcher = app('events');
     }
-
-    static function listenAAE(ActivityActivatedEvent $event) {
-        event(new \App\Events\ActivityActivatedEvent($event));
-        /*$token = $event->token;
-        $token->uid = $token->getId();
-        $token->status = $token->getStatus();
-        $token->element_ref = $event->activity->getId();
-        $token->instance_id = $token->getInstance()->getId();
-        dump($token->getProperties());*/
-    }
-
 }
