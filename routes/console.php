@@ -1,8 +1,6 @@
 <?php
 
-use ProcessMaker\Nayra\Storage\BpmnDocument;
-use App\BpmnEngine;
-use ProcessMaker\Nayra\Factory;
+use App\Facades\WorkflowManager;
 
 /*
   |--------------------------------------------------------------------------
@@ -15,29 +13,8 @@ use ProcessMaker\Nayra\Factory;
   |
  */
 
-Artisan::command('bpmn', function (BpmnEngine $engine) {
+Artisan::command('bpmn {filename} {process}', function ($filename, $process) {
 
-    $bpmnRepository = bootBpmnRepository($engine);
-
-    //Get the process object (REQUIRES Load the BPMN file)
-    $process = $bpmnRepository->getProcess('PROCESS_1');
-
-    //Start a process (REQUIRES a process reference)
-    $process->call();
-    $bpmnRepository->getEngine()->runToNextState();
+    WorkflowManager::callProcess($filename, $process);
 
 })->describe('Run BPMN');
-
-function bootBpmnRepository(BpmnEngine $engine) {
-    $factory = $engine->getFactory();
-
-    //Initialize BpmnDocument repository (REQUIRES $engine $factory)
-    $bpmnRepository = new BpmnDocument();
-    $bpmnRepository->setEngine($engine);
-    $bpmnRepository->setFactory($factory);
-
-    //Load the BPMN file
-    $bpmnRepository->load('bpmn/Lanes.bpmn');
-
-    return $bpmnRepository;
-}

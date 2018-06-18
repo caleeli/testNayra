@@ -3,6 +3,7 @@
 namespace App\Managers;
 
 use App\BpmnEngine;
+use App\Jobs\CallProcess;
 
 class WorkflowManager
 {
@@ -23,9 +24,9 @@ class WorkflowManager
 
     }
 
-    public function callProcess()
+    public function callProcess($filename, $processId)
     {
-
+        CallProcess::dispatch($filename, $processId);
     }
 
     public function runScripTask()

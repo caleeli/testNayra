@@ -16,9 +16,8 @@ class BpmnEventBus implements EventBusInterface
      */
     private $dispatcher;
 
-    public function __construct(/*$dispatcher*/)
+    public function __construct()
     {
-        //$this->dispatcher = $dispatcher;
         $this->dispatcher = app('events');
     }
 

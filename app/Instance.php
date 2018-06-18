@@ -21,6 +21,14 @@ class Instance extends Model implements ExecutionInstanceInterface
         'processRef' => 'process_ref',
     ];
 
+    protected $fillable = [
+        'uid',
+    ];
+
+    protected $attributes = [
+        'uid'=>null,
+    ];
+
     public function __construct(array $argument=[])
     {
         parent::__construct($argument);
@@ -28,7 +36,7 @@ class Instance extends Model implements ExecutionInstanceInterface
         $this->setId(uniqid());
     }
 
-    public function save(array $options = array())
+    /*public function save(array $options = array())
     {
         $dump = $this->dump();
         foreach ($dump['properties'] as $name => $value) {
@@ -53,11 +61,16 @@ class Instance extends Model implements ExecutionInstanceInterface
         $this->tokens()
             ->whereNotIn('id', $activeTokens)
             ->update(['status'=>\ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface::TOKEN_STATE_CLOSED]);
-    }
+    }*/
 
     public function tokens()
     {
-        return $this->hasMany(\ProcessMaker\Models\Token::class);
+        return $this->hasMany(\App\Token::class);
+    }
+
+    public function process()
+    {
+        return $this->belongsTo(\App\Process::class);
     }
 
     public function loadTokens()

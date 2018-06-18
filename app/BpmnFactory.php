@@ -19,7 +19,6 @@ use ProcessMaker\Nayra\Bpmn\Models\ParallelGateway;
 use ProcessMaker\Nayra\Bpmn\Models\Process;
 use ProcessMaker\Nayra\Bpmn\Models\ScriptTask;
 use ProcessMaker\Nayra\Bpmn\Models\StartEvent;
-use ProcessMaker\Nayra\Bpmn\Models\Token;
 use ProcessMaker\Nayra\Bpmn\Models\Collaboration;
 use ProcessMaker\Nayra\Bpmn\Models\ConditionalEventDefinition;
 use ProcessMaker\Nayra\Bpmn\Models\DataInput;
@@ -81,8 +80,9 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\TokenRepositoryInterface;
-use ProcessMaker\Nayra\Engine\ExecutionInstance;
 use ProcessMaker\Test\FormalExpression;
+use App\Token;
+use App\Instance;
 
 /**
  * Description of NayraFactory
@@ -100,8 +100,6 @@ class BpmnFactory extends Factory
         ErrorEventDefinitionInterface::class        => ErrorEventDefinition::class,
         ErrorInterface::class                       => Error::class,
         ExclusiveGatewayInterface::class            => ExclusiveGateway::class,
-        ExecutionInstanceInterface::class           => ExecutionInstance::class,
-        ExecutionInstanceRepositoryInterface::class => ExecutionInstanceRepository::class,
         FlowInterface::class                        => Flow::class,
         FormalExpressionInterface::class            => FormalExpression::class,
         InclusiveGatewayInterface::class            => InclusiveGateway::class,
@@ -125,12 +123,15 @@ class BpmnFactory extends Factory
         StateInterface::class                       => State::class,
         TerminateEventDefinitionInterface::class    => TerminateEventDefinition::class,
         TimerEventDefinitionInterface::class        => TimerEventDefinition::class,
-        TokenInterface::class                       => Token::class,
         TokenRepositoryInterface::class             => TokenRepository::class,
         DataInputInterface::class                   => DataInput::class,
         DataOutputInterface::class                  => DataOutput::class,
         InputSetInterface::class                    => InputSet::class,
         OutputSetInterface::class                   => OutputSet::class,
+        //Custom:
+        ExecutionInstanceRepositoryInterface::class => ExecutionInstanceRepository::class,
+        ExecutionInstanceInterface::class           => Instance::class,
+        TokenInterface::class                       => Token::class,
     ];
 
 }
