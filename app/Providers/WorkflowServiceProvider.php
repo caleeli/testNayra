@@ -2,14 +2,25 @@
 namespace App\Providers;
 
 use App\BpmnEngine;
-use App\BpmnEventBus;
-use App\BpmnFactory;
+use App\Listeners\BpmnSubscriber;
 use App\Managers\WorkflowManager;
-use ProcessMaker\Nayra\Storage\BpmnDocument;
+use App\Repositories\DefinitionsRepository;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
+use ProcessMaker\Nayra\Storage\BpmnDocument;
+use Illuminate\Support\Facades\Log;
 
-class WorkflowServiceProvider extends EventServiceProvider
+class WorkflowServiceProvider extends ServiceProvider
 {
+
+    /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
+    protected $subscribe = [
+        BpmnSubscriber::class,
+    ];
 
     /**
      * Bootstrap any application services.
@@ -32,43 +43,23 @@ class WorkflowServiceProvider extends EventServiceProvider
          * BPMN Workflow Manager
          */
         $this->app->singleton('workflow.manager', function ($app) {
-            return new WorkflowManager($app->make(BpmnEngine::class));
+            return new WorkflowManager();
         });
-        /**
-         * BPMN Factory
+        /** 
+         * BpmnDocument Process Context
          */
-        $this->app->singleton(BpmnFactory::class, function () {
-            return new BpmnFactory(BpmnFactory::mapping);
-        });
-        /**
-         * BPMN Event Bus
-         */
-        $this->app->singleton(BpmnEventBus::class, function () {
-            return new BpmnEventBus(app('events'));
-        });
-        /**
-         * BPMN Engine
-         */
-        $this->app->singleton(BpmnEngine::class, function ($app) {
-            $factory = $app->make(BpmnFactory::class);
-            $eventBus = $app->make(BpmnEventBus::class);
+        $this->app->bind(BpmnDocumentInterface::class, function ($app, $params) {
+            Log::debug('BPMN Document instantiated');
+            $repository = new DefinitionsRepository();
+            $eventBus = app('events');
 
             //Initialize the BpmnEngine
-            $engine = new BpmnEngine($factory, $eventBus);
-
-            return $engine;
-        });
-        /**
-         * BPMN Storage
-         */
-        $this->app->bind(BpmnDocumentInterface::class, function ($app) {
-            $engine = $app->make(BpmnEngine::class);
-            $factory = $app->make(BpmnFactory::class);
+            $engine = new BpmnEngine($repository, $eventBus);
 
             //Initialize BpmnDocument repository (REQUIRES $engine $factory)
             $bpmnRepository = new BpmnDocument();
             $bpmnRepository->setEngine($engine);
-            $bpmnRepository->setFactory($factory);
+            $bpmnRepository->setFactory($repository);
 
             return $bpmnRepository;
         });

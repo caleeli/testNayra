@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Listeners;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
@@ -7,6 +6,7 @@ use ProcessMaker\Nayra\Bpmn\Models\ActivityActivatedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCreatedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCompletedEvent;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Description of BpmnSubscriber
@@ -24,6 +24,7 @@ class BpmnSubscriber
     {
         $event->instance->uid = $event->instance->getId();
         $event->instance->save();
+        Log::info('ProcessCreated: ' . json_encode($event->instance->getProperties()));
     }
 
     /**
@@ -39,6 +40,7 @@ class BpmnSubscriber
         $token->element_ref = $event->activity->getId();
         $token->instance_id = $token->getInstance()->id;
         $token->save();
+        Log::info('ActivityActivated: ' . json_encode($token->getProperties()));
     }
 
     /**

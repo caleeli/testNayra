@@ -4,6 +4,11 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @see \App\Managers\WorkflowManager
+ * 
+ * @method mixed callProcess($filename, $processId)
+ */
 class WorkflowManager extends Facade
 {
     /**

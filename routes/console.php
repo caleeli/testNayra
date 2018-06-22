@@ -13,8 +13,14 @@ use App\Facades\WorkflowManager;
   |
  */
 
-Artisan::command('bpmn {filename} {process}', function ($filename, $process) {
+Artisan::command('bpmn:callProcess {filename} {process}', function ($filename, $process) {
 
     WorkflowManager::callProcess($filename, $process);
 
-})->describe('Run BPMN');
+})->describe('Run BPMN process');
+
+Artisan::command('complete:completeTask {filename} {process} {instanceId} {tokenId}', function ($filename, $process, $instanceId, $tokenId) {
+
+    WorkflowManager::completeTask($filename, $process, $instanceId, $tokenId);
+
+})->describe('Complete a instance-token');
