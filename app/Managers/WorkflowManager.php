@@ -12,9 +12,9 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 class WorkflowManager
 {
 
-    public function completeTask(Definitions $definitions, ProcessInterface $process, ExecutionInstanceInterface $instance, TokenInterface $token)
+    public function completeTask(Definitions $definitions, ExecutionInstanceInterface $instance, TokenInterface $token)
     {
-        CompleteActivity::dispatch($definitions, $process, $instance, $token);
+        CompleteActivity::dispatch($definitions, $instance, $token);
     }
 
     public function triggerEvent()

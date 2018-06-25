@@ -24,12 +24,11 @@ Artisan::command('bpmn:callProcess {definitionsId} {processId}', function ($defi
 
 })->describe('Run BPMN process');
 
-Artisan::command('bpmn:completeTask {definitionsId} {processId} {instanceId} {tokenId}', function ($definitionsId, $processId, $instanceId, $tokenId) {
+Artisan::command('bpmn:completeTask {definitionsId} {instanceId} {tokenId}', function ($definitionsId, $instanceId, $tokenId) {
     $definitions = Process::where('uid', $definitionsId)->first();
-    $process = $definitions->getDefinitions()->getProcess($processId);
     $instance = Instance::where('uid', $instanceId)->first();
     $token = Token::where('uid', $tokenId)->first();
 
-    WorkflowManager::completeTask($definitions, $process, $instance, $token);
+    WorkflowManager::completeTask($definitions, $instance, $token);
 
 })->describe('Complete a instance-token');

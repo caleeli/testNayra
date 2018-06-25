@@ -55,7 +55,6 @@ class ExampleTest extends TestCase
         //Se completa el token
         $this->artisan('bpmn:completeTask', [
             'definitionsId' => $this->definitions->uid,
-            'processId' => 'PROCESS_1',
             'instanceId' => $instance->uid,
             'tokenId' => $token->uid,
         ]);
