@@ -17,7 +17,7 @@ abstract class InstanceAction extends ProcessAction
     public function __construct($filename, $processId, ExecutionInstanceInterface $instance)
     {
         parent::__construct($filename, $processId);
-        $this->instanceId = $instance->getId();
+        $this->instanceId = $instance->uid;
     }
 
     /**

@@ -60,6 +60,7 @@ class WorkflowServiceProvider extends ServiceProvider
             $bpmnRepository = new BpmnDocument();
             $bpmnRepository->setEngine($engine);
             $bpmnRepository->setFactory($repository);
+            $engine->setStorage($bpmnRepository);
 
             return $bpmnRepository;
         });

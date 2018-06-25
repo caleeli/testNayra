@@ -6,7 +6,7 @@ use App\Repositories\ExecutionInstanceRepository;
 use App\Token;
 use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
-use ProcessMaker\Nayra\DefinitionsRepositoryTrait;
+use ProcessMaker\Nayra\RepositoryTrait;
 
 /**
  * Definitions Repository
@@ -15,7 +15,7 @@ use ProcessMaker\Nayra\DefinitionsRepositoryTrait;
 class DefinitionsRepository implements RepositoryInterface
 {
 
-    use DefinitionsRepositoryTrait;
+    use RepositoryTrait;
 
     public function createExecutionInstance()
     {

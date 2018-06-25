@@ -9,6 +9,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
+use App\Token;
 
 /**
  * Execution Instance Repository.
@@ -47,23 +48,23 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     public function loadExecutionInstanceByUid($uid)
     {
         $instance = Instance::where('uid', $uid)->first();
-        $processId = $instance->process->uid;
-        $processRepository = $this->getStorage()->getFactory()->createInstanceOf(ProcessRepositoryInterface::class, $this->getStorage());
-        $process = $processRepository->loadProcessByUid($processId);
-        $dataStore = $this->getStorage()->getFactory()->createInstanceOf(DataStoreInterface::class);
+        if (!$instance) return;
+        $callableId = $instance->callable_id;
+        //$processRepository = $this->getStorage()->getFactory()->createInstanceOf(ProcessRepositoryInterface::class, $this->getStorage());
+        $process = $this->getStorage()->getProcess($callableId);
+        $dataStore = $this->getStorage()->getFactory()->createDataStore();
         $dataStore->setData($instance->data);
         $instance->setProcess($process);
         $instance->setDataStore($dataStore);
         $process->getTransitions($this->getStorage()->getFactory());
 
         //Load tokens:
-        foreach($instance->tokens as $tokenInstance) {
+        foreach($instance->tokens as $token) {
             $tokenInfo = [
-                'id' => $tokenInstance->uid,
-                'status' => $tokenInstance->status,
-                'element_ref' => $tokenInstance->element_ref,
+                'id' => $token->uid,
+                'status' => $token->status,
+                'element_ref' => $token->element_ref,
             ];
-            $token = $this->getStorage()->getFactory()->createInstanceOf(TokenInterface::class);
             $token->setProperties($tokenInfo);
             $element = $this->getStorage()->getElementInstanceById($tokenInfo['element_ref']);
             $element->addToken($instance, $token);

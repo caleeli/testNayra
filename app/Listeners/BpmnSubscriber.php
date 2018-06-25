@@ -2,7 +2,9 @@
 namespace App\Listeners;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
-use ProcessMaker\Nayra\Bpmn\Models\ActivityActivatedEvent;
+use ProcessMaker\Nayra\Bpmn\Events\ActivityActivatedEvent;
+use ProcessMaker\Nayra\Bpmn\Events\ActivityCompletedEvent;
+use ProcessMaker\Nayra\Bpmn\Events\ActivityClosedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCreatedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCompletedEvent;
@@ -23,6 +25,7 @@ class BpmnSubscriber
     public function onProcessCreated(ProcessInstanceCreatedEvent $event)
     {
         $event->instance->uid = $event->instance->getId();
+        $event->instance->callable_id = $event->instance->getProcess()->getId();
         $event->instance->save();
         Log::info('ProcessCreated: ' . json_encode($event->instance->getProperties()));
     }
@@ -48,9 +51,31 @@ class BpmnSubscriber
      *
      * @param $event
      */
-    public function onActivityCompleted($event)
+    public function onActivityCompleted(ActivityCompletedEvent $event)
     {
-        dd($event);
+        $token = $event->token;
+        $token->uid = $token->getId();
+        $token->status = $token->getStatus();
+        $token->element_ref = $event->activity->getId();
+        $token->instance_id = $token->getInstance()->id;
+        $token->save();
+        Log::info('ActivityCompleted: ' . json_encode($token->getProperties()));
+    }
+
+    /**
+     * When an activity is closed.
+     *
+     * @param $event
+     */
+    public function onActivityClosed(ActivityClosedEvent $event)
+    {
+        $token = $event->token;
+        $token->uid = $token->getId();
+        $token->status = $token->getStatus();
+        $token->element_ref = $event->activity->getId();
+        $token->instance_id = $token->getInstance()->id;
+        $token->save();
+        Log::info('ActivityClosed: ' . json_encode($token->getProperties()));
     }
 
     /**

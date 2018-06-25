@@ -4,6 +4,7 @@ namespace App\Jobs;
 use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
+use Illuminate\Support\Facades\App;
 
 abstract class TokenAction extends InstanceAction
 {
@@ -18,7 +19,7 @@ abstract class TokenAction extends InstanceAction
     public function __construct($filename, $processId, ExecutionInstanceInterface $instance, TokenInterface $token)
     {
         parent::__construct($filename, $processId, $instance);
-        $this->tokenId = $token->getId();
+        $this->tokenId = $token->uid;
     }
 
     /**
@@ -37,16 +38,24 @@ abstract class TokenAction extends InstanceAction
 
             //Load process instance
             $instance = $workflow->getEngine()->loadExecutionInstance($this->instanceId);
+            if (!$instance) {
+                return;
+            }
             
             $token = null;
+            $element = null;
             foreach($instance->getTokens() as $token) {
                 if ($token->getId() === $this->tokenId) {
+                    $element = $workflow->getElementInstanceById($token->getProperty('element_ref'));
                     break;
+                } else {
+                    $token = null;
                 }
             }
+            $activity = $element;
 
             //Do the action
-            App::call([$this, 'action'], compact('workflow', 'process', 'instance', 'token'));
+            App::call([$this, 'action'], compact('workflow', 'process', 'instance', 'token', 'element', 'activity'));
 
             //Run engine to the next state
             $workflow->getEngine()->runToNextState();

@@ -19,7 +19,7 @@ Artisan::command('bpmn:callProcess {filename} {process}', function ($filename, $
 
 })->describe('Run BPMN process');
 
-Artisan::command('complete:completeTask {filename} {process} {instanceId} {tokenId}', function ($filename, $process, $instanceId, $tokenId) {
+Artisan::command('bpmn:completeTask {filename} {process} {instanceId} {tokenId}', function ($filename, $process, $instanceId, $tokenId) {
 
     WorkflowManager::completeTask($filename, $process, $instanceId, $tokenId);
 

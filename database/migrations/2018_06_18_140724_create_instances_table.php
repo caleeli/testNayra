@@ -16,6 +16,7 @@ class CreateInstancesTable extends Migration
         Schema::create('instances', function (Blueprint $table) {
             $table->increments('id');
             $table->string('uid');
+            $table->string('callable_id');
             $table->timestamps();
         });
     }

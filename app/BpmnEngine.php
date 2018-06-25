@@ -6,6 +6,7 @@ use ProcessMaker\Nayra\Contracts\Engine\EngineInterface;
 use ProcessMaker\Nayra\Contracts\EventBusInterface;
 use ProcessMaker\Nayra\Contracts\RepositoryInterface;
 use ProcessMaker\Nayra\Engine\EngineTrait;
+use ProcessMaker\Nayra\Contracts\Repositories\StorageInterface;
 
 /**
  * Test implementation for EngineInterface.
@@ -74,5 +75,15 @@ class BpmnEngine implements EngineInterface
     {
         $this->repository = $repository;
         return $this;
+    }
+
+    /**
+     * Get factory used to build this element.
+     *
+     * @return StorageInterface
+     */
+    public function getStorage()
+    {
+        return $this->storage;
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
-
+use ProcessMaker\Nayra\Contracts\Bpmn\ActivityInterface;
 
 class CompleteActivity extends TokenAction
 {
@@ -12,8 +12,8 @@ class CompleteActivity extends TokenAction
      *
      * @return void
      */
-    public function action(TokenInterface $token)
+    public function action(TokenInterface $token, ActivityInterface $activity)
     {
-        dd($token->getId());
+        $activity->complete($token);
     }
 }
