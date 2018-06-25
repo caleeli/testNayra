@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Bpmn\Model;
+use Illuminate\Database\Eloquent\Model;
 use ProcessMaker\Nayra\Bpmn\TokenTrait;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
