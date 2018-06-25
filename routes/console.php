@@ -1,6 +1,9 @@
 <?php
 
 use App\Facades\WorkflowManager;
+use App\Process;
+use App\Instance;
+use App\Token;
 
 /*
   |--------------------------------------------------------------------------
@@ -13,14 +16,20 @@ use App\Facades\WorkflowManager;
   |
  */
 
-Artisan::command('bpmn:callProcess {filename} {process}', function ($filename, $process) {
+Artisan::command('bpmn:callProcess {definitionsId} {processId}', function ($definitionsId, $processId) {
+    $definitions = Process::where('uid', $definitionsId)->first();
+    $process = $definitions->getDefinitions()->getProcess($processId);
 
-    WorkflowManager::callProcess($filename, $process);
+    WorkflowManager::callProcess($definitions, $process);
 
 })->describe('Run BPMN process');
 
-Artisan::command('bpmn:completeTask {filename} {process} {instanceId} {tokenId}', function ($filename, $process, $instanceId, $tokenId) {
+Artisan::command('bpmn:completeTask {definitionsId} {processId} {instanceId} {tokenId}', function ($definitionsId, $processId, $instanceId, $tokenId) {
+    $definitions = Process::where('uid', $definitionsId)->first();
+    $process = $definitions->getDefinitions()->getProcess($processId);
+    $instance = Instance::where('uid', $instanceId)->first();
+    $token = Token::where('uid', $tokenId)->first();
 
-    WorkflowManager::completeTask($filename, $process, $instanceId, $tokenId);
+    WorkflowManager::completeTask($definitions, $process, $instance, $token);
 
 })->describe('Complete a instance-token');

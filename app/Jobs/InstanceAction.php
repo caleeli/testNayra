@@ -1,8 +1,9 @@
 <?php
 namespace App\Jobs;
 
-use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use App\Process as Definitions;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 abstract class InstanceAction extends ProcessAction
 {
@@ -14,9 +15,9 @@ abstract class InstanceAction extends ProcessAction
      *
      * @return void
      */
-    public function __construct($filename, $processId, ExecutionInstanceInterface $instance)
+    public function __construct(Definitions $definitions, ProcessInterface $process, ExecutionInstanceInterface $instance)
     {
-        parent::__construct($filename, $processId);
+        parent::__construct($definitions, $process);
         $this->instanceId = $instance->uid;
     }
 
@@ -25,11 +26,12 @@ abstract class InstanceAction extends ProcessAction
      *
      * @return void
      */
-    public function handle(BpmnDocumentInterface $workflow)
+    public function handle()
     {
         try {
             //Load the process definition
-            $workflow->load($this->filename);
+            $definitions = Definitions::find($this->definitionsId);
+            $workflow = $definitions->getDefinitions();
 
             //Get the reference to the process
             $process = $workflow->getProcess($this->processId);

@@ -10,6 +10,7 @@ use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
 use ProcessMaker\Nayra\Storage\BpmnDocument;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use Illuminate\Support\Facades\App;
+use App\Process as Definitions;
 
 abstract class ProcessAction implements ShouldQueue
 {
@@ -19,7 +20,7 @@ abstract class ProcessAction implements ShouldQueue
         Queueable,
         SerializesModels;
 
-    public $filename;
+    public $definitionsId;
     public $processId;
 
     /**
@@ -27,10 +28,10 @@ abstract class ProcessAction implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($filename, $processId)
+    public function __construct(Definitions $definitions, ProcessInterface $process)
     {
-        $this->filename = $filename;
-        $this->processId = $processId;
+        $this->definitionsId = $definitions->id;
+        $this->processId = $process->getId();
     }
 
     /**
@@ -38,11 +39,12 @@ abstract class ProcessAction implements ShouldQueue
      *
      * @return void
      */
-    public function handle(BpmnDocumentInterface $workflow)
+    public function handle()
     {
         try {
             //Load the process definition
-            $workflow->load($this->filename);
+            $definitions = Definitions::find($this->definitionsId);
+            $workflow = $definitions->getDefinitions();
 
             //Get the reference to the object
             $process = $workflow->getProcess($this->processId);

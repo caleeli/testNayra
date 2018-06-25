@@ -1,10 +1,11 @@
 <?php
 namespace App\Jobs;
 
-use ProcessMaker\Nayra\Contracts\Storage\BpmnDocumentInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use Illuminate\Support\Facades\App;
+use App\Process as Definitions;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
 abstract class TokenAction extends InstanceAction
 {
@@ -16,9 +17,9 @@ abstract class TokenAction extends InstanceAction
      *
      * @return void
      */
-    public function __construct($filename, $processId, ExecutionInstanceInterface $instance, TokenInterface $token)
+    public function __construct(Definitions $definitions, ProcessInterface $process, ExecutionInstanceInterface $instance, TokenInterface $token)
     {
-        parent::__construct($filename, $processId, $instance);
+        parent::__construct($definitions, $process, $instance);
         $this->tokenId = $token->uid;
     }
 
@@ -27,11 +28,12 @@ abstract class TokenAction extends InstanceAction
      *
      * @return void
      */
-    public function handle(BpmnDocumentInterface $workflow)
+    public function handle()
     {
         try {
             //Load the process definition
-            $workflow->load($this->filename);
+            $definitions = Definitions::find($this->definitionsId);
+            $workflow = $definitions->getDefinitions();
 
             //Get the reference to the process
             $process = $workflow->getProcess($this->processId);

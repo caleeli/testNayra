@@ -2,18 +2,19 @@
 
 namespace App\Managers;
 
-use App\BpmnEngine;
 use App\Jobs\CallProcess;
 use App\Jobs\CompleteActivity;
+use App\Process as Definitions;
+use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
+use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
+use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 
 class WorkflowManager
 {
 
-    public function completeTask($filename, $processId, $instanceId, $tokenId)
+    public function completeTask(Definitions $definitions, ProcessInterface $process, ExecutionInstanceInterface $instance, TokenInterface $token)
     {
-        $instance = \App\Instance::find($instanceId);
-        $token = \App\Token::find($tokenId);
-        CompleteActivity::dispatch($filename, $processId, $instance, $token);
+        CompleteActivity::dispatch($definitions, $process, $instance, $token);
     }
 
     public function triggerEvent()
@@ -21,13 +22,13 @@ class WorkflowManager
 
     }
 
-    public function callProcess($filename, $processId)
+    public function callProcess(Definitions $definitions, ProcessInterface $process)
     {
         //Validate user permissions
         //Validate BPMN rules
         //Log BPMN actions
         //Schedule BPMN Action
-        CallProcess::dispatch($filename, $processId);
+        CallProcess::dispatch($definitions, $process);
     }
 
     public function runScripTask($filename, $processId, $instanceId, $tokenId)
