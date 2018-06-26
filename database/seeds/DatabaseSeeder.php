@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Process;
 
 class DatabaseSeeder extends Seeder
 {
+
     /**
      * Seed the application's database.
      *
@@ -11,6 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        //Create an example process
+        $process = factory(Process::class)->create([
+            'bpmn' => file_get_contents('bpmn/Lanes.bpmn'),
+        ]);
+        echo "Process created: ", $process->uid, "\n";
     }
 }
