@@ -6,8 +6,8 @@
     "type": "project",
     "repositories": [
         {
-            "type": "path",
-            "url": "/Users/davidcallizaya/Netbeans/nayra"
+            "type": "vcs",
+            "url": "https://github.com/ProcessMaker/nayra"
         }
     ],
     "require": {
@@ -16,7 +16,7 @@
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
         "predis/predis": "^1.1",
-        "processmaker/nayra": "dev-feature/83"
+        "processmaker/nayra": "dev-master"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
