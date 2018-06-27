@@ -7,7 +7,6 @@ use ProcessMaker\Nayra\Bpmn\Events\ActivityCompletedEvent;
 use ProcessMaker\Nayra\Bpmn\Events\ActivityClosedEvent;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCreatedEvent;
-use ProcessMaker\Nayra\Bpmn\Events\ProcessInstanceCompletedEvent;
 use Illuminate\Support\Facades\Log;
 
 /**

@@ -15,15 +15,6 @@ class Token extends Model implements TokenInterface
 {
     use TokenTrait;
 
-    const PROPERTY_STATUS = 'status';
-
-    const MAP = [
-            'id' => 'uid',
-            'status' => 'status',
-            'elementRef' => 'element_ref',
-            'instance_id' => 'instance_id',
-        ];
-
     protected $fillable = [
         'uid',
         'status',

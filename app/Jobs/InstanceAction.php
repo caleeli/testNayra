@@ -5,7 +5,7 @@ use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use App\Process as Definitions;
 use ProcessMaker\Nayra\Contracts\Bpmn\ProcessInterface;
 
-abstract class InstanceAction extends ProcessAction
+abstract class InstanceAction extends BpmnAction
 {
 
     public $instanceId;

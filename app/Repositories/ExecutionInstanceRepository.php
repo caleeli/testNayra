@@ -4,12 +4,8 @@ namespace App\Repositories;
 
 use App\Instance;
 use ProcessMaker\Nayra\Bpmn\RepositoryTrait;
-use ProcessMaker\Nayra\Contracts\Bpmn\DataStoreInterface;
-use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use ProcessMaker\Nayra\Contracts\Engine\ExecutionInstanceInterface;
 use ProcessMaker\Nayra\Contracts\Repositories\ExecutionInstanceRepositoryInterface;
-use ProcessMaker\Nayra\Contracts\Repositories\ProcessRepositoryInterface;
-use App\Token;
 
 /**
  * Execution Instance Repository.
@@ -21,21 +17,13 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
     use RepositoryTrait;
 
     /**
-     * Array to simulate a storage of execution instances.
-     *
-     * @var array $data
-     */
-    private static $data = [];
-
-    /**
      * Create an execution instance.
      *
      * @return \App\Instancex
      */
     public function createExecutionInstance()
     {
-        dd(':o');
-        return $this->getStorage()->getFactory()->createInstanceOf(ExecutionInstanceInterface::class);
+        //@todo Remove from Interface?
     }
 
     /**
@@ -81,6 +69,6 @@ class ExecutionInstanceRepository implements ExecutionInstanceRepositoryInterfac
      */
     public function storeExecutionInstance(ExecutionInstanceInterface $instance)
     {
-        // TODO: Implement store() method.
+        // TODO: Implement store() method. or Remove from Interface
     }
 }

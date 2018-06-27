@@ -6,7 +6,7 @@ use ProcessMaker\Nayra\Contracts\Bpmn\TokenInterface;
 use Illuminate\Support\Facades\App;
 use App\Process as Definitions;
 
-abstract class TokenAction extends ProcessAction
+abstract class TokenAction extends BpmnAction
 {
 
     public $definitionsId;
